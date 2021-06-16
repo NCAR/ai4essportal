@@ -18,6 +18,8 @@ This series will be broken down into 7 components of Machine Learning:
 
 * Prediction
 
+You can find more information on the steps involved in machine learning [here](https://towardsdatascience.com/the-7-steps-of-machine-learning-2877d7e5548e)
+
 These tutorials will make the assumption that the user has Python programming experience and a basic understanding of such computer science concepts as data structures.
 
 In notebook 1 we will go over gathering data, preparing data, and conducting an initial inspection and visual exploration of our data.
