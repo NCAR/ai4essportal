@@ -85,3 +85,4 @@ ENV/
 
 test*
 README_edit.ipynb
+*parquet
