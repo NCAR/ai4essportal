@@ -69,9 +69,9 @@ def metrics(truth, preds, stable_thresh = 1.0):
         t = truth.iloc[:, i]
         p = preds.iloc[:, i]
         
-        if i == 1:
-            t = 10**t
-            p = 10**p
+#         if i == 1:
+#             t = 10**t
+#             p = 10**p
         
         mae = mean_absolute_error(t,p)
         r2 = r2_corr(t, p)
@@ -100,11 +100,11 @@ def plot(truth, preds, fontsize = 14, prec_lim = 0.085, gas_lim = 0.034, aero_li
 
         plt.subplot(3, 3, k + 1)
         plt.plot(preds[c1]["Time [s]"] / 3600, 
-                 10**preds[c1]["Precursor [ug/m3]"], 
+                 preds[c1]["Precursor [ug/m3]"], 
                  c = colors[k], 
                  linewidth = 3)
         plt.plot(truth[c2]["Time [s]"] / 3600, 
-                 10**truth[c2]["Precursor [ug/m3]"], 
+                 truth[c2]["Precursor [ug/m3]"], 
                  ls = '--', 
                  c = 'k', 
                  linewidth = 3)
@@ -112,7 +112,7 @@ def plot(truth, preds, fontsize = 14, prec_lim = 0.085, gas_lim = 0.034, aero_li
             plt.ylabel("Precursor", fontsize=fontsize)
 
         plt.legend(["Pred", "True"], fontsize=fontsize)
-        plt.ylim([0, prec_lim])
+#         plt.ylim([0, prec_lim])
         plt.xticks(fontsize=fontsize)
         plt.yticks(fontsize=fontsize)
         plt.title(exp, fontsize=fontsize)
@@ -150,7 +150,7 @@ def plot(truth, preds, fontsize = 14, prec_lim = 0.085, gas_lim = 0.034, aero_li
     plt.tight_layout()
     plt.show()
     
-def box_val(mod, exps, num_timesteps, in_array, env_array, y_scaler, output_cols, out_val, stable_thresh = 1.0):
+def box_val(mod, exps, num_timesteps, in_array, env_array, output_cols, out_val, stable_thresh = 1.0):
     
     # use initial condition @ t = 0 and get the first prediction
     pred_array = np.empty((len(exps), 1439, 3))
@@ -169,7 +169,7 @@ def box_val(mod, exps, num_timesteps, in_array, env_array, y_scaler, output_cols
     # loop over the batch to fill up results dict
     results_dict = {}
     for k, exp in enumerate(exps):
-        results_dict[exp] = pd.DataFrame(y_scaler.inverse_transform(pred_array[k]), columns=output_cols[1:-1])
+        results_dict[exp] = pd.DataFrame(pred_array[k], columns=output_cols[1:-1])
         results_dict[exp]['id'] = exp
         results_dict[exp]['Time [s]'] = out_val['Time [s]'].unique()
         results_dict[exp] = results_dict[exp].reindex(output_cols, axis=1)
@@ -183,7 +183,8 @@ def box_val(mod, exps, num_timesteps, in_array, env_array, y_scaler, output_cols
         
     c1 = ~truth["id"].isin(failed_exps)
     c2 = ~preds["id"].isin(failed_exps)
-    box_mae = mean_absolute_error(preds[c2].iloc[:, 2:-1], truth[c1].iloc[:, 2:-1])
+#     box_mae = mean_absolute_error(preds[c2].iloc[:, 2:-1], truth[c1].iloc[:, 2:-1])
+    box_mae = 0
     
     return box_mae, truth, preds, failed_exps
 
